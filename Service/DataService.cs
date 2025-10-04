@@ -21,7 +21,8 @@ public class DataService
                 PostId = 1, 
                 AuthorName = "NoobMaster47", 
                 Title = "Hvordan bager man drømmekage?",
-                Content = "",
+                ThreadsContent = "",
+                Comments = "Istedet forvarm ovnen 150 grader, derefter xxxx", 
                 Created = DateTime.UtcNow,
             }; 
         }
