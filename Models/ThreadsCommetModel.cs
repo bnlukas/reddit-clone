@@ -12,4 +12,6 @@ public class ThreadsCommetModel
     public string Content { get; set; }
     
     public DateTime Created { get; set; } =  DateTime.UtcNow;
+    public int Upvotes { get; set; }
+    public int Downvotes { get; set; }
 }
