@@ -1,17 +1,25 @@
 namespace RedditClone.Models;
 
-public class ThreadsCommetModel
+public class ThreadsCommentModel
 {
-    public ThreadsCommetModel(string content)
+    public ThreadsCommentModel(string content)
     {
         Content = content;
     }
-    public ThreadsCommetModel() {}
-
+    public ThreadsCommentModel() {}
+    
     public int AuthorId { get; set; }
+    
+    public string AuthorName { get; set; }
+    
+    public string Comments { get; set; }
     public string Content { get; set; }
     
+    public int PostId { get; set; }
+    
     public DateTime Created { get; set; } =  DateTime.UtcNow;
+    
     public int Upvotes { get; set; }
+    
     public int Downvotes { get; set; }
 }

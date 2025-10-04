@@ -2,9 +2,10 @@ namespace RedditClone.Models;
 
 public class ThreadsModel
 {
-    public ThreadsModel(int id, string title, string content, int upvotes, int downvotes, DateTime created)
+    public ThreadsModel(int id, string name , string title, string content, int upvotes, int downvotes, DateTime created)
     {
-        AuthorId = id;
+        AuthorId = id; 
+        AuthorName = name;
         Title = title;
         Content = content;
         Upvotes = upvotes;
@@ -15,12 +16,20 @@ public class ThreadsModel
     public ThreadsModel()
     {
     } 
-
-    public int AuthorId { get; set; }
     
+    //_____ ID
+    public int AuthorId { get; set; }
+    public string? AuthorName { get; set; }
+    public int PostId { get; set; } 
+    // ______ INDHOLD 
     public string Title { get; set; }
     public string Content { get; set; }
+    
+    //________ DATE 
+    public DateTime Created { get; set; }
+    
+    // _______ POPULARITY 
     public int Upvotes { get; set; }
     public int Downvotes { get; set; }
-    public DateTime Created { get; set; }
+    
 }

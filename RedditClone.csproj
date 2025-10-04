@@ -29,4 +29,8 @@
     <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\_Imports.razor" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>
