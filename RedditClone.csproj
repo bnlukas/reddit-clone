@@ -11,4 +11,22 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\appsettings.json" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\obj\RedditFrontend.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Properties\launchSettings.json" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\App.razor" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\Layout\MainLayout.razor" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\Layout\NavMenu.razor" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\Pages\Counter.razor" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\Pages\Error.razor" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\Pages\Home.razor" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\Pages\Weather.razor" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\Routes.razor" />
+    <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\_Imports.razor" />
+  </ItemGroup>
+
 </Project>

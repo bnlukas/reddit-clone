@@ -1,19 +1,24 @@
 namespace RedditClone.Models;
 
-public class Post
+public class ThreadsModel
 {
-    public Post(int id, string title, string content, int upvotes, int downvotes, DateTime created)
+    public ThreadsModel(int id, string title, string content, int upvotes, int downvotes, DateTime created)
     {
-        Id = id;
-        this.title = title;
+        AuthorId = id;
+        Title = title;
         Content = content;
         Upvotes = upvotes;
         Downvotes = downvotes;
         Created = created;
     }
 
-    public int Id { get; set; }
-    public string title { get; set; }
+    public ThreadsModel()
+    {
+    } 
+
+    public int AuthorId { get; set; }
+    
+    public string Title { get; set; }
     public string Content { get; set; }
     public int Upvotes { get; set; }
     public int Downvotes { get; set; }
