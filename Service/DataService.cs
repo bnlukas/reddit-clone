@@ -1,8 +1,11 @@
+using Microsoft.EntityFrameworkCore;
 using RedditClone.Models;
 namespace RedditClone.Service;
 
 public class DataService
 {
+    
+    
     private RedditContent db { get;  }
 
     public DataService(RedditContent db)
@@ -17,14 +20,22 @@ public class DataService
         {
             threads = new ThreadsModel
             {
-                AuthorId = 1,
-                PostId = 1, 
+                PostId = 1,  
                 AuthorName = "NoobMaster47", 
                 Title = "Hvordan bager man drømmekage?",
                 ThreadsContent = "",
-                Comments = "Istedet forvarm ovnen 150 grader, derefter xxxx", 
+                Comments = new List<ThreadsCommentsModel>(), 
                 Created = DateTime.UtcNow,
             }; 
         }
     }
+
+    GetAllPost();
+    GetPost(int postID); 
+    CreatePost(ThreadsModel post);
+    AddComment(int postId, ThreadsCommentsModel comment);
+    UpvotePost(int postID);
+    DownvotePost(int postId);
+    
+
 }
