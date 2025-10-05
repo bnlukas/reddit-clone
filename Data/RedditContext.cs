@@ -16,7 +16,7 @@ public class RedditContent : DbContext
             
     }
 
-    public TaskContext()
+    public RedditContent()
     {
         var folder = AppContext.BaseDirectory; 
         DbPath = Path.Combine(folder, "reddit.db");

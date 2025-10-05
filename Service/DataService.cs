@@ -5,13 +5,7 @@ namespace RedditClone.Service;
 
 public class DataService
 {
-    using var db = new TaskContext()) {
-    Console.WriteLine($"Db path: {db.DbPath}");
-    
-    
-    }
-    
-    private RedditContent db { get;  }
+    private RedditContent db { get; }
 
     public DataService(RedditContent db)
     {
@@ -20,29 +14,35 @@ public class DataService
 
     public void SeedData()
     {
-        ThreadsModel threads = db.Authors.FirstOrDefault()!;
+        ThreadsModel threads = db.Threads.FirstOrDefault()!;
         if (threads == null)
         {
             threads = new ThreadsModel
             {
-                PostId = 1,  
-                AuthorName = "NoobMaster47", 
+                PostId = 1,
+                AuthorName = "NoobMaster47",
                 Title = "Hvordan bager man drømmekage?",
                 ThreadsContent = "",
-                Comments = new List<ThreadsCommentsModel>(), 
+                Comments = new List<ThreadsCommentsModel>(),
                 Created = DateTime.UtcNow,
-            }; 
+            };
         }
     }
-    
-    
-    GetAllPost();
-    GetPost(int postID); 
+
+
+    public List<ThreadsModel> GetAllThreads()
+    {
+        return db.Threads
+            .Include(t => t.Comments)
+            .OrderByDescending(t => t.Created)
+            .Take(50)
+            .ToList();
+    }
+    GetPost(int postID);
     CreatePost(ThreadsModel post);
     AddComment(int postId, ThreadsCommentsModel comment);
     UpvotePost(int postID);
     DownvotePost(int postId);
-    
 
-}
+
 }
