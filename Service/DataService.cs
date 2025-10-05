@@ -1,10 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using RedditClone.Data;
 using RedditClone.Models;
 namespace RedditClone.Service;
 
 public class DataService
 {
+    using var db = new TaskContext()) {
+    Console.WriteLine($"Db path: {db.DbPath}");
     
+    
+    }
     
     private RedditContent db { get;  }
 
@@ -29,7 +34,8 @@ public class DataService
             }; 
         }
     }
-
+    
+    
     GetAllPost();
     GetPost(int postID); 
     CreatePost(ThreadsModel post);
@@ -38,4 +44,5 @@ public class DataService
     DownvotePost(int postId);
     
 
+}
 }

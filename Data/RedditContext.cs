@@ -12,8 +12,18 @@ public class RedditContent : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=reddit.db");
+        optionsBuilder.UseSqlite($"Data Source={DbPath}"); 
+            
     }
+
+    public TaskContext()
+    {
+        var folder = AppContext.BaseDirectory; 
+        DbPath = Path.Combine(folder, "reddit.db");
+        Console.WriteLine($"Db vil være her {DbPath}"); 
+    }
+    
+    
 }
 
 
