@@ -10,17 +10,17 @@ public class ThreadsCommentsModel
     //______ ID 
     public int AuthorId { get; set; }
     
-    [Required] [MaxLength(20)]
-    public string AuthorName { get; set; }
+     [MaxLength(20)]
+    public required string AuthorName { get; set; }
 
-    public int PostId { get; set; }
+    public int ThreadsId { get; set; }
     
     [Key]
     public int CommentId { get; set; }
     //_____ INDHOLD 
 
     [MaxLength(1000)]
-    public string Comments { get; set; } 
+    public required string Comments { get; set; } 
     
     // _____ DATES 
     public DateTime Created { get; set; } =  DateTime.UtcNow;

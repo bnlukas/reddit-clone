@@ -16,7 +16,7 @@ public class DataService
     public void SeedData()
     {
         ThreadsModel? threads = db.Threads.FirstOrDefault()!;
-        if (threads == null)
+        if (!db.Threads.Any())
         {
             threads = new ThreadsModel
             {
@@ -31,24 +31,25 @@ public class DataService
                 
             };
         }
+        db.Threads.Add(threads);
         db.SaveChanges();
     }
 
 
-    public List<ThreadsModel> GetAllThreads()
+    public async Task<List<ThreadsModel>> GetAllThreads()
     {
-        return db.Threads
+        return await db.Threads
             .Include(t => t.Comments)
             .OrderByDescending(t => t.Created)
             .Take(50)
-            .ToList();
+            .ToListAsync();
     }
 
     public async Task<ThreadsModel?> GetThreads(int threadsId)
     {
-        return db.Threads
+        return await db.Threads
             .Include(t => t.Comments)
-            .FirstOrDefault(t => t.ThreadsId == threadsId);
+            .FirstOrDefaultAsync(t => t.ThreadsId == threadsId);
     }
 
     public async Task<ThreadsModel> CreateThread(ThreadsModel newThreads)
@@ -71,7 +72,7 @@ public class DataService
             Comments = content,
             AuthorName = authorName,
             Created = DateTime.UtcNow,
-            PostId = threadId
+            ThreadsId = threadId
 
         };
         thread.Comments.Add(comment);
