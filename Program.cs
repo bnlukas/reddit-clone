@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Http.HttpResults;
+using RedditClone.Data;
+using RedditClone.Service;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,30 +18,26 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddScoped<DataService>();
+builder.Services.AddDbContext<RedditContent>(); 
+
 var app = builder.Build();
 app.UseCors(AllowCors);
 
 //______ hent alle 
-app.MapGet("/api/threads", () => Thread);
+app.MapGet("/api/threads", async (DataService service) => service.GetAllThreads());
 
 //______ Henter specifik opgave med validering 
-app.MapGet("/api/threads/{id}", (int id) =>
+app.MapGet("/api/threads/{id}", async (DataService service) =>
 {
-    if (id < 0)
-        return BadRequest();
+    var thread = await service.GetThreads(threadsId);
+    return thread != null ? 
+        Results.Ok(thread) : Results.NotFound();
+}); 
 
-    if (id >= Thread.Count)
-        return Results.NotFound();
-
-    return Results.Ok(Thread[id]);
-});
 
 //______ Tilføjer ny threadscontent 
-app.MapPost("/api/tasks/{id}", (int id, ThreadsContent newThreadsContent) =>
-{
-    ThreadsContent.Add(id, newThreadsContent);
-    return Results.Created($"/api/threads/{ThreadsContent.Count - 1}", newThreadsContent);
-}); 
+app.MapPost("/api/tasks/{id}", (DataService service) => service.CreateThread());
 
 //______ opdatere en thread
 app.MapPut("/api/threads/{id}", (int id, xxxxx opdateret) =>
