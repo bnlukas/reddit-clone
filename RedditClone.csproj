@@ -32,6 +32,17 @@
     <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\Pages\Weather.razor" />
     <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\Routes.razor" />
     <_ContentIncludedByDefault Remove="RedditFrontend\RedditFrontend\Components\_Imports.razor" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\obj\RedditClone.Client.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\Properties\launchSettings.json" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\wwwroot\sample-data\weather.json" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\App.razor" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\Layout\MainLayout.razor" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\Layout\NavMenu.razor" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\Pages\Counter.razor" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\Pages\Home.razor" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\Pages\Weather.razor" />
+    <_ContentIncludedByDefault Remove="RedditClone.Client\_Imports.razor" />
   </ItemGroup>
 
 </Project>
