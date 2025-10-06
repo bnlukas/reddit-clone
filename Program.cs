@@ -3,6 +3,7 @@ using System;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Http.HttpResults;
 using RedditClone.Data;
+using RedditClone.Models;
 using RedditClone.Service;
 
 
@@ -27,26 +28,22 @@ app.UseCors(AllowCors);
 //______ hent alle 
 app.MapGet("/api/threads", async (DataService service) => service.GetAllThreads());
 
-//______ Henter specifik opgave med validering 
-app.MapGet("/api/threads/{id}", async (DataService service) =>
+//______ Henter specifik thread 
+app.MapGet("/api/threads/{id}", async (DataService service, int id) =>
 {
-    var thread = await service.GetThreads(threadsId);
-    return thread != null ? 
-        Results.Ok(thread) : Results.NotFound();
+    var thread = await service.GetThreads(id);
+    return thread != null 
+        ? Results.Ok(thread) : Results.NotFound();
 }); 
 
-
-//______ Tilføjer ny threadscontent 
-app.MapPost("/api/tasks/{id}", (DataService service) => service.CreateThread());
-
-//______ opdatere en thread
-app.MapPut("/api/threads/{id}", (int id, xxxxx opdateret) =>
+//_____ opret ny thread 
+app.MapPost("/api/threads", async (DataService service, ThreadsModel newThread) =>
 {
-    if (id < 0 || id >= ThreadsContent.Count)
-        return Results.NotFound(new { error = "ID not found" });
+    var createdThread = await service.CreateThread(newThread);
+    return Results.Created($"/api/threads/{createdThread.ThreadsId}", createdThread);
+});
 
-    ThreadsContent[id] = opdateret;
-    return Results.Ok(opdateret);
-}); 
+
+
 
 
