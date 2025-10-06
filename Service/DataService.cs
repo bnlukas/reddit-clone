@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using RedditClone.Data;
 using RedditClone.Models;
 namespace RedditClone.Service;
@@ -43,17 +44,17 @@ public class DataService
             .ToList();
     }
 
-    public ThreadsModel? GetThreads(int threadsId)
+    public async Task<ThreadsModel?> GetThreads(int threadsId)
     {
         return db.Threads
             .Include(t => t.Comments)
             .FirstOrDefault(t => t.ThreadsId == threadsId);
     }
 
-    public ThreadsModel CreateThread(ThreadsModel newThreads)
+    public async Task<ThreadsModel> CreateThread(ThreadsModel newThreads)
     {
         db.Threads.Add(newThreads);
-        db.SaveChanges();
+        await db.SaveChangesAsync();
         return newThreads;
     }
 
@@ -78,18 +79,44 @@ public class DataService
     }
 
 
-    public async Task<bool> VoteThread(int threadId)
+    
+    public enum VoteType
+    {
+        Up, Down 
+    }
+    
+    //____ vote on thread 
+    public async Task<bool> VoteThread(int threadId, VoteType voteType)
     {
         var thread = await db.Threads
             .FirstOrDefaultAsync(t => t.ThreadsId == threadId);
         if (thread != null)
         {
-            thread.Upvotes++;
+            if (voteType == VoteType.Up)
+                thread.UpVotes++;
+            else
+                thread.DownVotes++; 
+            
             await db.SaveChangesAsync();
             return true;
         }
-        await db.SaveChangesAsync();
-        return true;
+        return false;
     }
 
+
+    public async Task<bool> VoteComment(int commentId, VoteType voteType)
+    {
+        var comment = await db.ThreadsComments
+            .FirstOrDefaultAsync(c => c.CommentId == commentId);
+        if (comment != null)
+            {
+            if (voteType == VoteType.Up)
+                comment.UpVotes++;
+            else
+                comment.DownVotes++;
+            await db.SaveChangesAsync();
+            return true;
+            }
+        return false;
+    }
 }

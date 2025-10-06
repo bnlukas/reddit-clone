@@ -10,7 +10,7 @@ public class ThreadsCommentsModel
     public string AuthorName { get; set; }
 
     public int PostId { get; set; }
-
+    public int CommentId { get; set; }
     //_____ INDHOLD 
 
     public List<Comment> Comments { get; set; } = new List<Comment>(); 
@@ -20,7 +20,7 @@ public class ThreadsCommentsModel
     
     
     //____ POPULARITY 
-    public int Upvotes { get; set; }
+    public int UpVotes { get; set; }
     
-    public int Downvotes { get; set; }
+    public int DownVotes { get; set; }
 }

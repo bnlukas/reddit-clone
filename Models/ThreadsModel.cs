@@ -10,8 +10,8 @@ public class ThreadsModel
         AuthorName = name;
         Title = title;
         ThreadsContent = content;
-        Upvotes = upvotes;
-        Downvotes = downvotes;
+        UpVotes = upvotes;
+        DownVotes = downvotes;
         Created = created;
     }
 
@@ -32,7 +32,7 @@ public class ThreadsModel
     public DateTime Created { get; set; }
     
     // _______ POPULARITY 
-    public int Upvotes { get; set; }
-    public int Downvotes { get; set; }
+    public int UpVotes { get; set; }
+    public int DownVotes { get; set; }
     
 }
