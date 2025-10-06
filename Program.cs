@@ -23,6 +23,12 @@ builder.Services.AddScoped<DataService>();
 builder.Services.AddDbContext<RedditContent>(); 
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var service = scope.ServiceProvider.GetService<DataService>();
+    service?.SeedData();
+}
+
 app.UseCors(AllowCors);
 
 //______ hent alle 
@@ -52,19 +58,31 @@ app.MapPost("/api/threads/{id}/comments", async (DataService service, int id, Th
 
 
 //_____ upvote
-app.MapPost("/api/threads/{id}/upvote", async (DataService service, int id) =>
+app.MapPost("/api/threads/{id}/upvotethread", async (DataService service, int id) =>
 {
     var succes = await service.VoteThread(id, DataService.VoteType.Up);
     return succes ? Results.Ok() : Results.NotFound();
 });
 
 //_____ downvote
-app.MapPost("/api/threads/{id}/downvote", async (DataService service, int id) =>
+app.MapPost("/api/threads/{id}/downvotethread", async (DataService service, int id) =>
 {
     var succes = await service.VoteThread(id, DataService.VoteType.Down);
     return succes ? Results.Ok() : Results.NotFound();
 });
 
+//_____ vote on comment 
+app.MapPost("/api/threads/{id}/upvotecomments", async (DataService service, int id, ThreadsCommentsModel voteComment) =>
+{
+    var succes = await service.VoteComment(id, DataService.VoteType.Up);
+    return succes ? Results.Ok() : Results.NotFound();
+});
 
+//_____ vote on comment 
+app.MapPost("/api/threads/{id}/downvotecomments", async (DataService service, int id, ThreadsCommentsModel voteComment) =>
+{
+    var succes = await service.VoteComment(id, DataService.VoteType.Down);
+    return succes ? Results.Ok() : Results.NotFound();
+});
 
 

@@ -58,6 +58,7 @@ public class DataService
         return newThreads;
     }
 
+    
     public async Task<ThreadsCommentsModel?> AddComment(int threadId, string content, string authorName)
     {
         var thread = await db.Threads
@@ -100,8 +101,9 @@ public class DataService
         return true;
     }
     
-
-
+    
+    
+    //_____ vote on comment 
     public async Task<bool> VoteComment(int commentId, VoteType voteType)
     {
         var comment = await db.ThreadsComments
