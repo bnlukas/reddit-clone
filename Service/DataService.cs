@@ -50,58 +50,46 @@ public class DataService
             .FirstOrDefault(t => t.ThreadsId == threadsId);
     }
 
-    public CreateThread(ThreadsModel newThreads)
+    public ThreadsModel CreateThread(ThreadsModel newThreads)
     {
         db.Threads.Add(newThreads);
         db.SaveChanges();
         return newThreads;
     }
 
-    public async AddComment(int threadId, string content)
+    public async Task<ThreadsCommentsModel?> AddComment(int threadId, string content, string authorName)
     {
-        var thread = await db.Threads.Include(t => t.Comments)
-            .FirstOrDefault(t => t.id == threadId);
+        var thread = await db.Threads
+            .Include(t => t.Comments)
+            .FirstOrDefaultAsync(t => t.ThreadsId == threadId);
         if (thread == null)
             return null;
         var comment = new ThreadsCommentsModel
         {
-            Comments = "",
+            Comments = content,
+            AuthorName = authorName,
             Created = DateTime.UtcNow,
-            Content = "",
+            PostId = threadId
 
         };
         thread.Comments.Add(comment);
         await db.SaveChangesAsync();
-        return Task.Ok(comment);
+        return (comment);
     }
 
-    public Task<bool> UpvoteThread(int threadId)
+
+    public async Task<bool> VoteThread(int threadId)
     {
         var thread = await db.Threads
-            .Include(t => t.Comments)
-            .FirstOrDefault(t => t.ThreadsId == threadId);
+            .FirstOrDefaultAsync(t => t.ThreadsId == threadId);
         if (thread != null)
         {
-            thread.Upvotes++; 
+            thread.Upvotes++;
             await db.SaveChangesAsync();
             return true;
         }
-        return Task.FromResult(false);
+        await db.SaveChangesAsync();
+        return true;
     }
-
-    public Task<bool> DownvoteThread(int threadId)
-    {
-        var thread = db.Threads
-            .Include(t => t.Comments)
-            .FirstOrDefault(t => t.ThreadsId == threadId);
-        if  (thread != null)
-            {
-            thread.Downvotes--;
-            await db.SaveChangesAsync();
-            return true;
-            }
-        return Task.FromResult(false);
-    }
-
 
 }
