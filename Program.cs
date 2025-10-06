@@ -32,7 +32,8 @@ using (var scope = app.Services.CreateScope())
 app.UseCors(AllowCors);
 
 //______ hent alle 
-app.MapGet("/api/threads", async (DataService service) => service.GetAllThreads());
+app.MapGet("/api/threads", (DataService service) => 
+    service.GetAllThreads());
 
 //______ Henter specifik thread 
 app.MapGet("/api/threads/{id}", async (DataService service, int id) =>

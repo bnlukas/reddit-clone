@@ -15,24 +15,40 @@ public class DataService
 
     public void SeedData()
     {
-        ThreadsModel? threads = db.Threads.FirstOrDefault()!;
         if (!db.Threads.Any())
         {
-            threads = new ThreadsModel
+            var threads = new List<ThreadsModel>
             {
-                ThreadsId = 1,
-                AuthorName = "NoobMaster47",
-                Title = "Hvordan bager man drømmekage?",
-                ThreadsContent = "",
-                Comments = new List<ThreadsCommentsModel>(),
-                UpVotes = 4,
-                DownVotes = 3,
-                Created = DateTime.UtcNow,
-                
-            };
-        }
-        db.Threads.Add(threads);
-        db.SaveChanges();
+                new ()
+                {
+
+                    ThreadsId = 1,
+                    AuthorName = "NoobMaster47",
+                    Title = "Hvordan bager man drømmekage?",
+                    ThreadsContent = "",
+                    Comments = new List<ThreadsCommentsModel>(),
+                    UpVotes = 4,
+                    DownVotes = 3,
+                    Created = DateTime.UtcNow
+                },
+
+                new()
+                {
+                    ThreadsId = 2,
+                    AuthorName = "Benjaminkorteben",
+                    Title = "Hvordan betaler man moms gennem erhverskonto? ",
+                    ThreadsContent = "Jeg har lige fået at vide, jeg skal betale moms af dette " +
+                                     "xxxxxxx",
+                    Comments = new List<ThreadsCommentsModel>(),
+                    UpVotes = 100,
+                    DownVotes = 238,
+                    Created = DateTime.UtcNow,
+                }
+
+            };        
+            db.Threads.AddRange(threads);
+            db.SaveChanges();
+        }; 
     }
 
 
