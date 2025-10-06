@@ -5,8 +5,8 @@ namespace RedditClone.Data;
 
 public class RedditContent : DbContext  
 {
-    public DbSet<ThreadsModel?> Threads { get; set; }
- 
+    private string DbPath { get; }
+    public DbSet<ThreadsModel> Threads { get; set; }
     public DbSet<ThreadsCommentsModel> ThreadsComments { get; set; }
     
     
@@ -22,8 +22,6 @@ public class RedditContent : DbContext
         DbPath = Path.Combine(folder, "reddit.db");
         Console.WriteLine($"Db vil være her {DbPath}"); 
     }
-    
-    
 }
 
 

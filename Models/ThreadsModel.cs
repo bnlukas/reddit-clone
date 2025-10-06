@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace RedditClone.Models;
@@ -24,7 +25,10 @@ public class ThreadsModel
     public int? ThreadsId { get; set; } 
    
     // ______ INDHOLD 
+    [MaxLength(40)]
     public string Title { get; set; } = String.Empty;
+    
+    [MaxLength(200)]
     public string? ThreadsContent { get; set; } =String.Empty;// Tekst indhold 
     public List<ThreadsCommentsModel> Comments { get; set; } = new(); 
     

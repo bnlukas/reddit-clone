@@ -25,8 +25,8 @@ public class DataService
                 Title = "Hvordan bager man drømmekage?",
                 ThreadsContent = "",
                 Comments = new List<ThreadsCommentsModel>(),
-                Upvotes = 4,
-                Downvotes = 3,
+                UpVotes = 4,
+                DownVotes = 3,
                 Created = DateTime.UtcNow,
                 
             };
@@ -90,33 +90,28 @@ public class DataService
     {
         var thread = await db.Threads
             .FirstOrDefaultAsync(t => t.ThreadsId == threadId);
-        if (thread != null)
-        {
-            if (voteType == VoteType.Up)
-                thread.UpVotes++;
-            else
-                thread.DownVotes++; 
+        if (thread == null) return false;
+        if (voteType == VoteType.Up)
+            thread.UpVotes++;
+        else
+            thread.DownVotes++; 
             
-            await db.SaveChangesAsync();
-            return true;
-        }
-        return false;
+        await db.SaveChangesAsync();
+        return true;
     }
+    
 
 
     public async Task<bool> VoteComment(int commentId, VoteType voteType)
     {
         var comment = await db.ThreadsComments
             .FirstOrDefaultAsync(c => c.CommentId == commentId);
-        if (comment != null)
-            {
-            if (voteType == VoteType.Up)
-                comment.UpVotes++;
-            else
-                comment.DownVotes++;
-            await db.SaveChangesAsync();
-            return true;
-            }
-        return false;
+        if (comment == null) return false;
+        if (voteType == VoteType.Up)
+            comment.UpVotes++;
+        else
+            comment.DownVotes++;
+        await db.SaveChangesAsync();
+        return true;
     }
 }
