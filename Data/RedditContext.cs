@@ -5,7 +5,7 @@ namespace RedditClone.Data;
 
 public class RedditContent : DbContext  
 {
-    public DbSet<ThreadsModel> Threads { get; set; }
+    public DbSet<ThreadsModel?> Threads { get; set; }
  
     public DbSet<ThreadsCommentsModel> ThreadsComments { get; set; }
     

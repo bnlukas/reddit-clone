@@ -12,8 +12,8 @@ public class ThreadsCommentsModel
     public int PostId { get; set; }
 
     //_____ INDHOLD 
-    
-    public string Comments { get; set; }
+
+    public List<Comment> Comments { get; set; } = new List<Comment>(); 
     
     // _____ DATES 
     public DateTime Created { get; set; } =  DateTime.UtcNow;

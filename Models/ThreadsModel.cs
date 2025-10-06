@@ -6,7 +6,7 @@ public class ThreadsModel
 {
     public ThreadsModel(int postid, string name ,string title, string content, int upvotes, int downvotes, DateTime created)
     {
-        PostId = postid; 
+        ThreadsId = postid; 
         AuthorName = name;
         Title = title;
         ThreadsContent = content;
@@ -21,11 +21,11 @@ public class ThreadsModel
     
     //_____ ID
     public string? AuthorName { get; set; }
-    public int PostId { get; set; } 
+    public int? ThreadsId { get; set; } 
    
     // ______ INDHOLD 
-    public string Title { get; set; }
-    public string ThreadsContent { get; set; } // Tekst indhold 
+    public string Title { get; set; } = String.Empty;
+    public string? ThreadsContent { get; set; } =String.Empty;// Tekst indhold 
     public List<ThreadsCommentsModel> Comments { get; set; } = new(); 
     
     //________ DATE 
