@@ -22,6 +22,8 @@ public class ThreadsModel
     
     //_____ ID
     public string? AuthorName { get; set; }
+    
+    [Key]
     public int? ThreadsId { get; set; } 
    
     // ______ INDHOLD 

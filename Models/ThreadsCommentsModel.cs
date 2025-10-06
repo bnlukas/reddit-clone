@@ -14,6 +14,8 @@ public class ThreadsCommentsModel
     public string AuthorName { get; set; }
 
     public int PostId { get; set; }
+    
+    [Key]
     public int CommentId { get; set; }
     //_____ INDHOLD 
 
