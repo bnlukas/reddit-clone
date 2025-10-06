@@ -43,6 +43,27 @@ app.MapPost("/api/threads", async (DataService service, ThreadsModel newThread) 
     return Results.Created($"/api/threads/{createdThread.ThreadsId}", createdThread);
 });
 
+//____ skriver en kommentar 
+app.MapPost("/api/threads/{id}/comments", async (DataService service, int id, ThreadsCommentsModel newComment) =>
+{
+    var comment = await service.AddComment(id, newComment.Comments, newComment.AuthorName);
+    return Results.Ok(comment);
+});
+
+
+//_____ upvote
+app.MapPost("/api/threads/{id}/upvote", async (DataService service, int id) =>
+{
+    var succes = await service.VoteThread(id, DataService.VoteType.Up);
+    return succes ? Results.Ok() : Results.NotFound();
+});
+
+//_____ downvote
+app.MapPost("/api/threads/{id}/downvote", async (DataService service, int id) =>
+{
+    var succes = await service.VoteThread(id, DataService.VoteType.Down);
+    return succes ? Results.Ok() : Results.NotFound();
+});
 
 
 
