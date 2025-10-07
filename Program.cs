@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Model;
 using RedditClone.Data;
-using RedditClone.Models;
 using RedditClone.Service;
 
 
@@ -44,16 +44,16 @@ app.MapGet("/api/threads/{id}", async (DataService service, int id) =>
 }); 
 
 //_____ opret ny thread 
-app.MapPost("/api/threads", async (DataService service, ThreadsModel newThread) =>
+app.MapPost("/api/threads", async (DataService service, Post newThread) =>
 {
     var createdThread = await service.CreateThread(newThread);
-    return Results.Created($"/api/threads/{createdThread.ThreadsId}", createdThread);
+    return Results.Created($"/api/threads/{createdThread.Id}", createdThread);
 });
 
 //____ skriver en kommentar 
-app.MapPost("/api/threads/{id}/comments", async (DataService service, int id, ThreadsCommentsModel newComment) =>
+app.MapPost("/api/threads/{id}/comments", async (DataService service, int id, Comment newComment) =>
 {
-    var comment = await service.AddComment(id, newComment.Content, newComment.AuthorName);
+    var comment = await service.AddComment(id, newComment.Content, newComment.User.Username);
     return Results.Ok(comment);
 });
 

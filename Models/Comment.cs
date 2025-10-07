@@ -1,12 +1,14 @@
-namespace shared.Model;
+namespace Model;
 
 public class Comment
 {
+    public int Id { get; set; }
     public int AuthorId { get; set; }
     public string Content { get; set; }
     public int Upvotes { get; set; }
     public int Downvotes { get; set; }
     public User User { get; set; }
+    public DateTime Created { get; set; } = DateTime.UtcNow;
     public Comment(string content = "", int upvotes = 0, int downvotes = 0, User user = null)
     {
         Content = content;

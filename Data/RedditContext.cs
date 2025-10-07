@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using RedditClone.Models;
+using Model;
+
 
 namespace RedditClone.Data;
 
 public class RedditContent : DbContext  
 {
     private string DbPath { get; }
-    public DbSet<ThreadsModel> Threads { get; set; }
-    public DbSet<ThreadsCommentsModel> ThreadsComments { get; set; }
+    public DbSet<Post> Posts { get; set; }
+    public DbSet<Comment> Comments { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
