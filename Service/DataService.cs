@@ -73,11 +73,10 @@ public class DataService
             return null;
         var comment = new ThreadsCommentsModel
         {
-            Comments = content,
+            Content = content,
             AuthorName = authorName,
             Created = DateTime.UtcNow,
-            ThreadsId = threadId
-
+            ThreadsId = threadId,
         };
         thread.Comments.Add(comment);
         await db.SaveChangesAsync();
