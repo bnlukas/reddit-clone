@@ -6,13 +6,31 @@ namespace RedditClone.Service;
 
 public class DataService
 {
-    private RedditContent db { get; }
-
+    private readonly RedditContent db; 
     public DataService(RedditContent db)
     {
         this.db = db;
     }
 
+    public async Task<Post> CreatePostAsync(Post newPost)
+    {
+        await db.Posts.AddAsync(newPost);
+        await db.SaveChangesAsync();
+        return newPost;
+    }
+
+    public async Task<Comment> AddCommentAsync(int postId, string content, int userId)
+    {
+        var post = await db.Posts.FindAsync(postId);
+        if (post == null) 
+            throw new ArgumentException("Du finder ikke et post her");
+
+        var comment = new Comment(content, userId, postId);
+        
+        post.Comments?.Add(comment);
+        await db.SaveChangesAsync();
+        return comment;
+    }
     public void SeedData()
     {
         if (db.Posts.Any()) return;
@@ -26,7 +44,6 @@ public class DataService
                 Content = "Jeg vil gerne lære at bage den perfekte drømmekage!",
                 Upvotes = 4,
                 Downvotes = 3,
-                Created = DateTime.UtcNow
             },
             new()
             {
@@ -35,7 +52,6 @@ public class DataService
                 Content = "Jeg har lige fået at vide, jeg skal betale moms...",
                 Upvotes = 100,
                 Downvotes = 238,
-                Created = DateTime.UtcNow,
             }
         };
 
@@ -48,7 +64,7 @@ public class DataService
     public async Task<List<Post>> GetAllThreads()
     {
         return await db.Posts
-            .Include(t => t.Comments)
+            .Include(t => t.Comments)!
             .ThenInclude(c => c.User)
             .OrderByDescending(t => t.Created)
             .Take(50)
@@ -58,15 +74,31 @@ public class DataService
     public async Task<Post?> GetThreads(int threadsId)
     {
         return await db.Posts
-            .Include(t => t.Comments)
+            .Include(t => t.User)
+            .Include(t => t.Comments)!
+            .ThenInclude(c => c.User)
             .FirstOrDefaultAsync(t => t.Id == threadsId);
     }
 
-    public async Task<Post> CreateThread(Post newThreads)
+    public async Task<Post> CreateThread(Post newPost)
     {
-        db.Posts.Add(newThreads);
-        await db.SaveChangesAsync();
-        return newThreads;
+        try
+        {
+            db.Posts.Add(newPost); 
+            await db.SaveChangesAsync();
+            return newPost;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Fejl ved CreateThread:");
+            Console.WriteLine(ex.Message);
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine("Indre fejl:");
+                Console.WriteLine(ex.InnerException.Message);
+            }
+            throw;
+        }
     }
 
     public async Task<Comment?> AddComment(int threadId, string content, string authorName)
@@ -76,14 +108,18 @@ public class DataService
             .FirstOrDefaultAsync(t => t.Id == threadId);
         if (thread == null) return null;
 
+        var newUser = new User { Username = authorName };
+        db.Users.Add(newUser);
+        await db.SaveChangesAsync();
+        
         var comment = new Comment
         {
             Content = content,
-            User = new User { Username = authorName },
+            UserId = newUser.Id,
             Created = DateTime.UtcNow
         };
 
-        thread.Comments.Add(comment);
+        thread.Comments?.Add(comment);
         await db.SaveChangesAsync();
         return comment;
     }

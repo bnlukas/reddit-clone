@@ -1,32 +1,32 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Model;
 
-public class Post {
+public class Post
+{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-    public string Title { get; set; }
-    public string Content { get; set; }
+
+    public string Title { get; set; } = "";
+    public string Content { get; set; } = "";
     public int Upvotes { get; set; }
     public int Downvotes { get; set; }
-    public User User { get; set; }
-    public DateTime Created { get; set; } = DateTime.UtcNow;
+    public DateTime Created { get; set; } = DateTime.Now;
+
     public List<Comment> Comments { get; set; } = new List<Comment>();
-    public Post(User user, string title = "", string content = "", int upvotes = 0, int downvotes = 0) {
+    public int UserId { get; set; }
+    public User User { get; set; } = null!;
+    public Post() {}
+
+    public Post(User user, string title, string content, int upvotes = 0, int downvotes = 0)
+    {
+        User = user; 
         Title = title;
         Content = content;
         Upvotes = upvotes;
         Downvotes = downvotes;
-        User = user;
-    }
-    public Post() {
-        Id = 0;
-        Title = "";
-        Content = "";
-        Upvotes = 0;
-        Downvotes = 0;
-        User = null;
     }
 
-    public override string ToString()
-    {
-        return $"Id: {Id}, Title: {Title}, Content: {Content}, Upvotes: {Upvotes}, Downvotes: {Downvotes}, User: {User}";
-    }
 }

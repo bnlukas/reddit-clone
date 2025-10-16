@@ -1,13 +1,23 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Model;
 
-public class User {
+public class User
+{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-    public string Username { get; set; }
-    public User(string username = "") {
+
+    public string Username { get; set; } = "";
+    public List<Post> Posts { get; set; } = new();
+    public List<Comment> Comments { get; set; } = new(); 
+    
+    public User() {}
+
+    public User(string username)
+    {
         Username = username;
     }
-    public User() {
-        Id = 0;
-        Username = "";
-    }
+    
 }

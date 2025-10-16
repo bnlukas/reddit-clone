@@ -7,20 +7,38 @@ using RedditClone.Data;
 using RedditClone.Service;
 
 
+
+
 var builder = WebApplication.CreateBuilder(args);
-var AllowCors = "_AllowCors";
+const string allowCors = "_AllowCors";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: AllowCors, builder =>
+    options.AddPolicy(name: allowCors, corsPolicyBuilder =>
     {
-        builder.AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+        corsPolicyBuilder.WithOrigins("https://localhost:7228", "http://localhost:5202")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
+var apiBase = builder.Configuration["base_api"];
+builder.Services.AddScoped(sp => new HttpClient
+{
+    BaseAddress = new Uri(apiBase)
+});
 builder.Services.AddScoped<DataService>();
 builder.Services.AddDbContext<RedditContent>(); 
+
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -29,7 +47,7 @@ using (var scope = app.Services.CreateScope())
     service?.SeedData();
 }
 
-app.UseCors(AllowCors);
+app.UseCors("_AllowCors");
 
 //______ hent alle 
 app.MapGet("/api/threads", (DataService service) => 
@@ -46,15 +64,27 @@ app.MapGet("/api/threads/{id}", async (DataService service, int id) =>
 //_____ opret ny thread 
 app.MapPost("/api/threads", async (DataService service, Post newThread) =>
 {
-    var createdThread = await service.CreateThread(newThread);
-    return Results.Created($"/api/threads/{createdThread.Id}", createdThread);
+    try
+    {
+        var createdThread = await service.CreateThread(newThread);
+        return Results.Created($"/api/threads/{createdThread.Id}", createdThread);
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine(ex.Message);
+        return Results.Problem(detail: ex.Message, statusCode: 500);
+    }
 });
 
 //____ skriver en kommentar 
 app.MapPost("/api/threads/{id}/comments", async (DataService service, int id, Comment newComment) =>
 {
-    var comment = await service.AddComment(id, newComment.Content, newComment.User.Username);
+    var comment = await service.AddComment(
+        id, newComment.Content ?? "",
+        newComment.User?.Username ?? "Anonymous");
+    
     return Results.Ok(comment);
+  
 });
 
 
