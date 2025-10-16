@@ -8,16 +8,8 @@ public class User
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-
     public string Username { get; set; } = "";
     public List<Post> Posts { get; set; } = new();
     public List<Comment> Comments { get; set; } = new(); 
-    
-    public User() {}
-
-    public User(string username)
-    {
-        Username = username;
-    }
     
 }

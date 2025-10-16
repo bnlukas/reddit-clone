@@ -1,13 +1,7 @@
 using Microsoft.AspNetCore.Mvc; 
-using System;
-using System.Net.Mime;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Model;
 using RedditClone.Data;
 using RedditClone.Service;
-
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 const string allowCors = "_AllowCors";
@@ -20,7 +14,6 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
-
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {

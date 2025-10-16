@@ -6,11 +6,13 @@ namespace RedditClone.Data;
 
 public class RedditContent : DbContext  
 {
-    
+    //____ tables i db 
     private string DbPath { get; }
     public DbSet<Post> Posts { get; set; } = null!; 
     public DbSet<Comment> Comments { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!; 
+    
+    //___ Kan fjernes og erstattes med builder.services
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite($"Data Source={DbPath}"); 
@@ -23,6 +25,7 @@ public class RedditContent : DbContext
         Console.WriteLine($"Db vil være her {DbPath}"); 
     }
 
+    //____ DB relationer
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Post>()

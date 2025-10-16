@@ -12,26 +12,8 @@ public class DataService
     {
         this.db = db;
     }
-
-    public async Task<Post> CreatePostAsync(Post newPost)
-    {
-        await db.Posts.AddAsync(newPost);
-        await db.SaveChangesAsync();
-        return newPost;
-    }
-
-    public async Task<Comment> AddCommentAsync(int postId, string content, int userId)
-    {
-        var post = await db.Posts.FindAsync(postId);
-        if (post == null) 
-            throw new ArgumentException("Du finder ikke et post her");
-
-        var comment = new Comment(content, userId, postId);
-        
-        post.Comments?.Add(comment);
-        await db.SaveChangesAsync();
-        return comment;
-    }
+    
+    //_______ Mock data + fylder db hvis tom
     public void SeedData()
     {
         if (db.Posts.Any()) return;
@@ -61,7 +43,7 @@ public class DataService
         Console.WriteLine($"Seeded {posts.Count} posts");
     }
 
-
+    //___ __ Henter alle threads med kommentare og brugere
     public async Task<List<Post>> GetAllThreads()
     {
         return await db.Posts
@@ -72,6 +54,7 @@ public class DataService
             .ToListAsync();
     }
 
+    //______ HENTER EN specifik post med detaljer
     public async Task<Post?> GetThreads(int threadsId)
     {
         return await db.Posts
@@ -81,6 +64,8 @@ public class DataService
             .FirstOrDefaultAsync(t => t.Id == threadsId);
     }
 
+    
+    //______ Opretter en ny post i db
     public async Task<Post> CreateThread(Post newPost)
     {
         try
@@ -91,6 +76,7 @@ public class DataService
         }
         catch (Exception ex)
         {
+            // en smule fejl loggin til debuggin 
             Console.WriteLine("Fejl ved CreateThread:");
             Console.WriteLine(ex.Message);
             if (ex.InnerException != null)
@@ -102,30 +88,37 @@ public class DataService
         }
     }
 
+    
+    //______ tilføjer kommentar til en post
     public async Task<Comment?> AddComment(int threadId, string content, string authorName)
     {
+        //___ finder posten
         var thread = await db.Posts
             .Include(t => t.Comments)
             .FirstOrDefaultAsync(t => t.Id == threadId);
         if (thread == null) return null;
 
+        //___ ny kommentar, ny user
         var newUser = new User { Username = authorName };
         db.Users.Add(newUser);
         await db.SaveChangesAsync();
         
-        
+        //___ new comment
         var comment = new Comment
         {
             Content = content,
             UserId = newUser.Id,
             Created = DateTime.UtcNow
         };
-
+        
+        //___ tilføjer kommentaren til postens liste
         thread.Comments?.Add(comment);
         await db.SaveChangesAsync();
         return comment;
     }
 
+    
+    //__________ Til VOTETYPE UP N DOWN 
     public enum VoteType
     {
         Up,
@@ -163,6 +156,7 @@ public class DataService
         return true;
     }
 
+    //______ Sortering og flitering 
     public async Task<List<Post>> GetThreadsSorted(string sortBy = "newest", string filterBy = "all")
     {
         var query = db.Posts
@@ -177,6 +171,8 @@ public class DataService
             query = query
                 .Where(p => (p.Upvotes - p.Downvotes) >= 10); 
         }
+        
+        //___ kun posts hvor folk er uengie (up n downvotes)
         else if (filterBy == "controversial")
         {
             query = query
