@@ -173,6 +173,7 @@ public class DataService
         }
         
         //___ kun posts hvor folk er uengie (up n downvotes)
+        //___ overflødig
         else if (filterBy == "controversial")
         {
             query = query
