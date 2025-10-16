@@ -116,4 +116,9 @@ app.MapPost("/api/threads/{id}/downvotecomments", async (DataService service, in
     return succes ? Results.Ok() : Results.NotFound();
 });
 
+//______ hent alle med sortering og flitering 
+app.MapGet("/api/threads/sorted", (DataService service, [FromQuery] string sortBy = "newest", [FromQuery] string filterBy = "all") => 
+service.GetThreadsSorted(sortBy, filterBy));
+
+
 app.Run();
