@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Net.Http.Headers;
 using Model;
 using RedditClone.Data;
@@ -112,6 +113,7 @@ public class DataService
         db.Users.Add(newUser);
         await db.SaveChangesAsync();
         
+        
         var comment = new Comment
         {
             Content = content,
@@ -159,6 +161,45 @@ public class DataService
 
         await db.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<List<Post>> GetThreadsSorted(string sortBy = "newest", string filterBy = "all")
+    {
+        var query = db.Posts
+            .Include(t => t.Comments)
+            .ThenInclude(c => c.User)
+            .AsQueryable();
+
+        
+        //_____ flitering 
+        if (filterBy == "popular")
+        {
+            query = query
+                .Where(p => (p.Upvotes - p.Downvotes) >= 10); 
+        }
+        else if (filterBy == "controversial")
+        {
+            query = query
+                .Where(p => (p.Upvotes > 0 && p.Downvotes > 0)); 
+            
+        }
+        
+        //____ SORTTERING 
+        query = sortBy.ToLower() switch
+        {
+            "votes" => query
+                .OrderByDescending(p => (p.Upvotes - p.Downvotes)),
+
+            "comments" => query
+                .OrderByDescending(p => p.Comments.Count),
+
+            "oldest" => query
+                .OrderBy(p => p.Created),
+            _ => query
+                .OrderByDescending(p => p.Created),
+
+        };
+        return await query.Take(50).ToListAsync();
     }
 }
 
